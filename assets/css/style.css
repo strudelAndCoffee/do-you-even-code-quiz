@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+}
+
+/**** Header Section ****/
+/* main header */
+h1 {
+    color: green;
+    text-align: center;
+    padding: 2%;
+}
+
+/* secondary header */
+.header-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.view-high-scores, .time-left {
+    background-color: orange;
+    text-align: center;
+    flex: 1;
+    margin: 0 5%;
+}
+
+/*** Main Section ***/
+/* main display for quiz cards */
+main {
+    padding-top: 10%;
+}
+
+.display {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* quiz card */
+.quiz-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    border: 1px solid black;
+    width: 350px;
+}
