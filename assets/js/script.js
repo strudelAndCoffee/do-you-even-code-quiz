@@ -100,7 +100,7 @@ var displayMessage = function(msgObj) {
         var currentCard = document.querySelector(".msg-card");
         currentCard.remove();
 
-        var newCard = displayEl.createElement("article");
+        var newCard = document.createElement("article");
         newCard.className = "msg-card";
         newCard.innerHTML = displayMsg;
         var newBtnY = document.createElement("button")
@@ -138,27 +138,28 @@ var startTimer = function (event) {
 
 // Runs through quiz cards
 var runQuiz = function() {
-    for (var i = 0; i < quizCardArray; i++) {
+    
+    for (var i = 0; i < quizCardArray.length; i++) {
         var currentCard = quizCardArray[i];
         var wrongAnswers = currentCard.wrongAnswers;
         var rightAnswer = currentCard.rightAnswer;
 
-        var newCardEl = displayEl.createElement("article");
+        var newCardEl = document.createElement("article");
         newCardEl.className = "quiz-card";
         newCardEl.setAttribute("id", currentCard.id);
 
-        var cardQuestion = displayEl.createElement("h4");
+        var cardQuestion = document.createElement("h4");
         cardQuestion.className = "quiz-question";
         cardQuestion.textContent = currentCard.question;
         newCardEl.appendChild(cardQuestion);
 
-        var cardAnswersEl = displayEl.createElement("ul");
+        var cardAnswersEl = document.createElement("ul");
         cardAnswersEl.className = "quiz-answers";
         var allAnswers = [];
 
         for (var i = 0; i < wrongAnswers.length; i++) {
-            var wrongAnswerEl = displayEl.createElement("li");
-            var wrongAnswerBtn = displayEl.createElement("button");
+            var wrongAnswerEl = document.createElement("li");
+            var wrongAnswerBtn = document.createElement("button");
             wrongAnswerBtn.setAttribute("data-answer", 0);
             wrongAnswerBtn.textContent = wrongAnswers[i];
             wrongAnswerEl.appendChild(wrongAnswerBtn);
@@ -166,8 +167,8 @@ var runQuiz = function() {
             allAnswers.push(wrongAnswerEl);
         }
 
-        var rightAnswerEl = displayEl.createElement("li");
-        var rightAnswerBtn = displayEl.createElement("button");
+        var rightAnswerEl = document.createElement("li");
+        var rightAnswerBtn = document.createElement("button");
         rightAnswerBtn.setAttribute("data-answer", 1);
         rightAnswerBtn.textContent = rightAnswer;
         rightAnswerEl.appendChild(rightAnswerBtn);
@@ -176,10 +177,12 @@ var runQuiz = function() {
         shuffleArray(allAnswers);
 
         for (var i = 0; i < allAnswers.length; i++) {
-            cardAnswersEl.appendChild(allAnswers[i]);
+            var answerEl = allAnswers[i];
+            cardAnswersEl.appendChild(answerEl);
         }
 
         newCardEl.appendChild(cardAnswersEl);
+        displayEl.appendChild(newCardEl);
 
         currentCardHandler(currentCard);
     }
