@@ -34,27 +34,27 @@ var timesUpMsgObj = {
 // Quiz card message objects
 var card1 = {
     id: 1,
-    question: "this is the question for card id=1",
-    wrongAnswers: ["card 1: wrong answer 1", "card 1: wrong answer 2", "card 1: wrong answer 3"],
-    rightAnswer: "card 1: right answer",
+    question: "What is 2 + 2?",
+    wrongAnswers: ["5", "1", "3"],
+    rightAnswer: "4",
 };
 var card2 = {
     id: 2,
-    question: "this is the question for card id=2",
-    wrongAnswers: ["card 2: wrong answer 1", "card 2: wrong answer 2", "card 2: wrong answer 3"],
-    rightAnswer: "card 2: right answer",
+    question: "What is 2 - 2?",
+    wrongAnswers: ["2", "1", "-2"],
+    rightAnswer: "0",
 };
 var card3 = {
     id: 3,
-    question: "this is the question for card id=3",
-    wrongAnswers: ["card 3: wrong answer 1", "card 3: wrong answer 2", "card 3: wrong answer 3"],
-    rightAnswer: "card 3: right answer",
+    question: "What is 2 * 2?",
+    wrongAnswers: ["2", "8", "5"],
+    rightAnswer: "4",
 };
 var card4 = {
     id: 4,
-    question: "this is the question for card id=4",
-    wrongAnswers: ["card 4: wrong answer 1", "card 4: wrong answer 2", "card 4: wrong answer 3"],
-    rightAnswer: "card 4: right answer",
+    question: "What is 2 / 2 ",
+    wrongAnswers: ["2", "-1", "0"],
+    rightAnswer: "1",
 };
 var quizCardArray = [card1, card2, card3, card4];
 shuffleArray(quizCardArray);
