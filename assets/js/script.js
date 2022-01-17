@@ -9,8 +9,26 @@ var shuffleArray = function (array) {
   };
 
 var timerEl = document.querySelector("#timer");
-var quizCardEl = document.querySelector(".display");
+var displayEl = document.querySelector(".display");
 
+// Display message objects
+var beginMsg = {
+    msg: "<p>Answer as many questions correctly as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Good Luck!",
+    btnId: "start-continue",
+    btnMsg: "Got It",
+};
+var completeMsg = {
+    msg: "<p>You finished! <br />Let's see how you did...",
+    btnId: "end-continue",
+    btnMsg: "Continue",
+};
+var timesUpMsg = {
+    msg: "<p>Oops! You ran out of time. <br />Try again?",
+    btnId: "end-prompt",
+    btnMsgY: "Try Again",
+    btnMsgN: "Quit",
+};
+// Quiz card message objects
 var card1 = {
     id: 1,
     question: "this is the question for card id=1",
@@ -35,7 +53,6 @@ var card4 = {
     wrongAnswers: ["card 4: wrong answer 1", "card 4: wrong answer 2", "card 4: wrong answer 3"],
     correctAnswer: "card 4: correct answer",
 };
-
 var quizCardArray = [card1, card2, card3, card4];
 shuffleArray(quizCardArray);
 
@@ -45,6 +62,8 @@ var startTimer = function (event) {
 
     if (targetBtn.matches("#begin-btn")) {
         runQuiz();
+        displayMessage(beginMsg);
+
         let currentTime = 60;
 
         var timeInterval = setInterval(function () {
@@ -56,8 +75,6 @@ var startTimer = function (event) {
             clearInterval(timeInterval);
             }
         }, 1000);
-
-        timeInterval();
     }
 };
 
@@ -65,4 +82,45 @@ var runQuiz = function() {
 
 }
 
-quizCardEl.addEventListener("click", startTimer);
+// Generates message to display before/after taking quiz
+var displayMessage = function(msgObj) {
+
+    if (msgObj !== timesUpMsg) {
+        var displayMsg = msgObj.msg;
+        var btnId = msgObj.btnId;
+        var btnMsg = msgObj.btnMsg;
+
+        var currentCard = document.querySelector(".msg-card");
+        var msgEl = document.querySelector(".display");
+        currentCard.remove();
+
+        var newCard = msgEl.createElement("article");
+        newCard.className = "msg-card";
+        newCard.innerHTML = displayMsg;
+        var newBtn = document.createElement("button")
+        newBtn.setAttribute("data-btn-id", btnId);
+        newBtn.textContent = btnMsg;
+    }
+    else if (msgObj === timesUpMsg) {
+        var displayMsg = msgObj.msg;
+        var btnId = msgObj.btnId;
+        var btnYes = msgObj.btnMsgY;
+        var btnNo = msgObj.btnMsgN;
+
+        var currentCard = document.querySelector(".msg-card");
+        var msgEl = document.querySelector(".display");
+        currentCard.remove();
+
+        var newCard = msgEl.createElement("article");
+        newCard.className = "msg-card";
+        newCard.innerHTML = displayMsg;
+        var newBtnY = document.createElement("button")
+        newBtnY.setAttribute("data-btn-id", btnId);
+        newBtnY.textContent = btnYes;
+        var newBtnN = document.createElement("button")
+        newBtnN.setAttribute("data-btn-id", btnId);
+        newBtnN.textContent = btnNo;
+    }
+};
+
+displayEl.addEventListener("click", startTimer);
