@@ -159,8 +159,10 @@ var runQuiz = function() {
 
         for (var i = 0; i < wrongAnswers.length; i++) {
             var wrongAnswerEl = document.createElement("li");
+            wrongAnswerEl.className = "list-answer";
             var wrongAnswerBtn = document.createElement("button");
             wrongAnswerBtn.setAttribute("data-answer", 0);
+            wrongAnswerBtn.className = "answer-btn";
             wrongAnswerBtn.textContent = wrongAnswers[i];
             wrongAnswerEl.appendChild(wrongAnswerBtn);
 
@@ -168,8 +170,10 @@ var runQuiz = function() {
         }
 
         var rightAnswerEl = document.createElement("li");
+        rightAnswerEl.className = "list-answer";
         var rightAnswerBtn = document.createElement("button");
         rightAnswerBtn.setAttribute("data-answer", 1);
+        rightAnswerBtn.className = "answer-btn";
         rightAnswerBtn.textContent = rightAnswer;
         rightAnswerEl.appendChild(rightAnswerBtn);
 
@@ -183,15 +187,31 @@ var runQuiz = function() {
 
         newCardEl.appendChild(cardAnswersEl);
         displayEl.appendChild(newCardEl);
-
-        currentCardHandler(currentCard);
+        cardAnswersEl.addEventListener("click", response);
     }
 };
 
-var currentCardHandler = function(card) {
-    var currentCard = card;
+var response = function(event) {
+    var cardEl = document.querySelector(".quiz-card");
+    var selectedAnswer = event.target;
+    var answerBtnValue = selectedAnswer.getAttribute("data-answer");
 
-;}
+    if (answerBtnValue == 1) {
+        selectedAnswer.setAttribute("style", "background-color: green;");
+        var answerMsg = document.createElement("h4");
+        answerMsg.className = "answer-msg";
+        answerMsg.textContent = "Correct!";
+        cardEl.appendChild(answerMsg);
+    }
+    else if (answerBtnValue == 0) {
+        selectedAnswer.setAttribute("style", "background-color: orange;");
+        var answerMsg = document.createElement("h4");
+        answerMsg.className = "answer-msg";
+        answerMsg.textContent = "Incorrect.";
+        cardEl.appendChild(answerMsg);
+    }
+};
+
 
 var playAgain = function(event) {
     var targetBtn = event.target;
