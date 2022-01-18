@@ -11,7 +11,9 @@ var shuffleArray = function (array) {
 // GLOBAL VARIABLES AND OBJECTS
 // Element selectors for page sections
 var timerEl = document.querySelector("#timer");
+var currentTime = 60;
 var displayEl = document.querySelector(".display");
+var correctResponses = 0;
 
 // Display message objects
 var startMsgObj = {
@@ -121,8 +123,6 @@ var startTimer = function (event) {
         currentCard.remove();
 
         runQuiz();
-        
-        let currentTime = 60;
 
         var timeInterval = setInterval(function () {
             if (currentTime >= 1) {
@@ -131,6 +131,7 @@ var startTimer = function (event) {
             } else {
             timerEl.textContent = 0;
             clearInterval(timeInterval);
+            runGameOver();
             }
         }, 1000);
     }
@@ -202,6 +203,7 @@ var response = function(event) {
         answerMsg.className = "answer-msg";
         answerMsg.textContent = "Correct!";
         cardEl.appendChild(answerMsg);
+        correctResponses++;
     }
     else if (answerBtnValue == 0) {
         selectedAnswer.setAttribute("style", "background-color: orange;");
@@ -209,6 +211,7 @@ var response = function(event) {
         answerMsg.className = "answer-msg";
         answerMsg.textContent = "Incorrect.";
         cardEl.appendChild(answerMsg);
+        currentTime -= 5;
     }
 };
 
