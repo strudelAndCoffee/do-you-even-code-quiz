@@ -62,15 +62,6 @@ var quizCardArray = [card1, card2, card3, card4];
 shuffleArray(quizCardArray);
 
 // GLOBAL FUNCTIONS
-// Prompt to begin
-var beginQuiz = function(event) {
-    targetBtn = event.target;
-
-    if (targetBtn.matches("#begin-btn")) {
-        displayMessage(startMsgObj);
-    }
-};
-
 // Generates messages to display before/after taking quiz
 var displayMessage = function(msgObj) {
 
@@ -111,29 +102,6 @@ var displayMessage = function(msgObj) {
         var newBtnN = document.createElement("button")
         newBtnN.setAttribute("id", btnIdNo);
         newBtnN.textContent = btnNo;
-    }
-};
-
-// Starts countdown and quiz
-var startTimer = function (event) {
-    var targetBtn = event.target;
-
-    if (targetBtn.matches("#start")) {
-        var currentCard = document.querySelector(".msg-card");
-        currentCard.remove();
-
-        runQuiz();
-
-        var timeInterval = setInterval(function () {
-            if (currentTime >= 1) {
-            timerEl.textContent = currentTime;
-            currentTime--;
-            } else {
-            timerEl.textContent = 0;
-            clearInterval(timeInterval);
-            runGameOver();
-            }
-        }, 1000);
     }
 };
 
@@ -227,6 +195,37 @@ var playAgain = function(event) {
     }
 }
 
-displayEl.addEventListener("click", beginQuiz);
-displayEl.addEventListener("click", startTimer);
+// Prompt to begin
+displayEl.addEventListener("click", function(event) {
+    targetBtn = event.target;
+
+    if (targetBtn.matches("#begin-btn")) {
+        displayMessage(startMsgObj);
+    }
+});
+
+// Starts countdown and quiz
+displayEl.addEventListener("click", function(event) {
+    var targetBtn = event.target;
+
+    if (targetBtn.matches("#start")) {
+        var currentCard = document.querySelector(".msg-card");
+        currentCard.remove();
+
+        runQuiz();
+
+        var timeInterval = setInterval(function () {
+            if (currentTime >= 1) {
+            timerEl.textContent = currentTime;
+            currentTime--;
+            } else {
+            timerEl.textContent = 0;
+            clearInterval(timeInterval);
+            runGameOver();
+            }
+        }, 1000);
+    }
+});
+
+// Restarts quiz
 displayEl.addEventListener("click", playAgain);
