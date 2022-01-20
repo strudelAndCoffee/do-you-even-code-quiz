@@ -13,7 +13,7 @@ var shuffleArray = function (array) {
 var displayEl = document.querySelector(".display");
 var displayStatus = displayEl.getAttribute("status");
 var timerEl = document.querySelector("#timer");
-var currentTime = 75;
+var currentTime = 10;
 var correctAnswers = 0;
 
 // quiz card message objects
@@ -69,7 +69,16 @@ var startMessage = function() {
 };
 
 var startTimer = function() {
-    console.log("timer has started");
+    var timeInterval = setInterval(function () {
+        if (currentTime >= 1) {
+        timerEl.textContent = currentTime;
+        currentTime--;
+        } else {
+        timerEl.textContent = 0;
+        clearInterval(timeInterval);
+        runTimeOut();
+        }
+    }, 1000);
 };
 
 var runQuizCard = function() {
@@ -152,11 +161,16 @@ var endMessage = function() {
             displayScore();
         }
     });
-}
+};
+
+var runTimeOut = function() {
+    removeCard();
+    window.alert("Opps, you ran out of time!");
+};
 
 var displayScore = function() {
     window.alert(correctAnswers);
-}
+};
 
 // Global event listeners
 displayEl.addEventListener("click", function(event) {
