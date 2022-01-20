@@ -11,7 +11,9 @@ var shuffleArray = function (array) {
 // Global variables and objects
 // display elements
 var displayEl = document.querySelector(".display");
+var displayStatus = displayEl.getAttribute("status");
 var timerEl = document.querySelector("#timer");
+var currentTime = 75;
 
 // quiz card message objects
 var card1 = {
@@ -38,10 +40,14 @@ var quizCardArray = [card1, card2, card3, card4];
 shuffleArray(quizCardArray);
 
 // Global functions
-// starting message and prompt
+var removeCard = function() {
+    var currentCard = document.querySelector(".card");
+    currentCard.remove();
+}
+
 var startMessage = function() {
-    var currentMsg = document.querySelector(".card");
-    currentMsg.remove();
+    
+    removeCard();
 
     var newMsg = document.createElement("article");
     newMsg.className = "card";
@@ -55,92 +61,103 @@ var startMessage = function() {
     displayEl.appendChild(newMsg);
     displayEl.addEventListener("click", function(event) {
         if (event.target.matches("#start-btn")) {
-            runQuiz();
+            startTimer();
+            runQuizCard();
         }
     });
-};
-
-// displays quiz cards and cycles through after answering until time runs out
-var runQuiz = function() {
-
-    startTimer();
-
-    for (var i = 0; i < quizCardArray.length; i++) {
-
-        var currentCard = displayEl.querySelector(".card");
-        currentCard.remove();
-
-        var quizCardInfo = quizCardArray[i];
-        var wrongAns = quizCardInfo.wrongAnswers;
-        var rightAns = quizCardInfo.rightAnswer;
-
-        var newCard = document.createElement("article");
-        newCard.className = "card";
-        var cardQuestion = document.createElement("h4");
-        cardQuestion.textContent = quizCardInfo.question;
-        newCard.appendChild(cardQuestion);
-        var ansList = document.createElement("ul");
-        ansList.className = "quiz-answers";
-        var allAnswers = [];
-
-        for (var i = 0; i < wrongAns.length; i++) {
-            var wrongAnswerEl = document.createElement("li");
-            wrongAnswerEl.className = "list-answer";
-            var wrongAnswerBtn = document.createElement("button");
-            wrongAnswerBtn.setAttribute("data-answer", 0);
-            wrongAnswerBtn.className = "answer-btn";
-            wrongAnswerBtn.textContent = wrongAns[i];
-            wrongAnswerEl.appendChild(wrongAnswerBtn);
-
-            allAnswers.push(wrongAnswerEl);
-        };
-
-        var rightAnswerEl = document.createElement("li");
-        rightAnswerEl.className = "list-answer";
-        var rightAnswerBtn = document.createElement("button");
-        rightAnswerBtn.setAttribute("data-answer", 1);
-        rightAnswerBtn.className = "answer-btn";
-        rightAnswerBtn.textContent = rightAns;
-        rightAnswerEl.appendChild(rightAnswerBtn);
-
-        allAnswers.push(rightAnswerEl);
-        shuffleArray(allAnswers);
-
-        for (var i = 0; i < allAnswers.length; i++) {
-            var answerEl = allAnswers[i];
-            ansList.appendChild(answerEl);
-        };
-
-        newCard.appendChild(ansList);
-        displayEl.appendChild(newCard);
-        displayEl.addEventListener("click", function(event) {
-            var target = event.target;
-
-            if (target.matches(".answer-btn")) {
-                var response = target.getAttribute("data-answer");
-                parseInt(response);
-                
-                if (response == 1) {
-                    console.log("Correct!");
-                    return;
-                }
-                else if (response == 0) {
-                    console.log("Sorry, incorrect");
-                    return;
-                };
-            }
-        });
-    };
 };
 
 var startTimer = function() {
     console.log("timer has started");
 };
 
+var runQuizCard = function() {
+
+    removeCard();
+
+    var currentCard = quizCardArray.shift();
+
+    if (!currentCard) {
+        console.log("that was the last card");
+    }
+    else {
+        quizCardHandler(currentCard);
+    };
+};
+
+var quizCardHandler = function(card) {
+
+    var wrongAns = card.wrongAnswers;
+    var rightAns = card.rightAnswer;
+
+    var newCard = document.createElement("article");
+    newCard.className = "card";
+
+    var cardQuestion = document.createElement("h4");
+    cardQuestion.textContent = card.question;
+    newCard.appendChild(cardQuestion);
+
+    var ansList = document.createElement("ul");
+    ansList.className = "quiz-answers";
+    var allAnswers = [];
+
+    for (var i = 0; i < wrongAns.length; i++) {
+
+        var wrongAnswerEl = document.createElement("li");
+        wrongAnswerEl.className = "list-answer";
+        var wrongAnswerBtn = document.createElement("button");
+        wrongAnswerBtn.setAttribute("data-answer", 0);
+        wrongAnswerBtn.className = "answer-btn";
+        wrongAnswerBtn.textContent = wrongAns[i];
+        wrongAnswerEl.appendChild(wrongAnswerBtn);
+
+        allAnswers.push(wrongAnswerEl);
+    };
+
+    var rightAnswerEl = document.createElement("li");
+    rightAnswerEl.className = "list-answer";
+    var rightAnswerBtn = document.createElement("button");
+    rightAnswerBtn.setAttribute("data-answer", 1);
+    rightAnswerBtn.className = "answer-btn";
+    rightAnswerBtn.textContent = rightAns;
+    rightAnswerEl.appendChild(rightAnswerBtn);
+
+    allAnswers.push(rightAnswerEl);
+    shuffleArray(allAnswers);
+
+    for (var i = 0; i < allAnswers.length; i++) {
+        var answerEl = allAnswers[i];
+        ansList.appendChild(answerEl);
+    };
+
+    newCard.appendChild(ansList);
+    displayEl.appendChild(newCard);
+};
+
+
 // Global event listeners
-// displays starting message when "begin" button is clicked
 displayEl.addEventListener("click", function(event) {
     if (event.target.matches("#begin-btn")) {
         startMessage();
+    }
+});
+
+displayEl.addEventListener("click", function(event) {
+    var target = event.target;
+
+    if (target.matches(".answer-btn")) {
+
+        var responseId = target.getAttribute("data-answer");
+        parseInt(responseId);
+        var responseText = target.textContent;
+
+        if (responseId == 1) {
+            console.log("Correct answer: " + responseText);
+        }
+        else if (responseId == 0) {
+            console.log("Sorry, incorrect answer: " + responseText);
+        }
+
+        runQuizCard();
     }
 });
