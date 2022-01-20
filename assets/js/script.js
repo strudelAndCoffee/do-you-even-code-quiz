@@ -14,6 +14,7 @@ var displayEl = document.querySelector(".display");
 var displayStatus = displayEl.getAttribute("status");
 var timerEl = document.querySelector("#timer");
 var currentTime = 75;
+var correctAnswers = 0;
 
 // quiz card message objects
 var card1 = {
@@ -78,7 +79,7 @@ var runQuizCard = function() {
     var currentCard = quizCardArray.shift();
 
     if (!currentCard) {
-        console.log("that was the last card");
+        endMessage();
     }
     else {
         quizCardHandler(currentCard);
@@ -134,6 +135,28 @@ var quizCardHandler = function(card) {
     displayEl.appendChild(newCard);
 };
 
+var endMessage = function() {
+    var newMsg = document.createElement("article");
+    newMsg.className = "card";
+    newMsg.innerHTML = "<p>You answered all of the cards! <br />Let's see how you did...";
+    var msgBtn = document.createElement("button");
+    msgBtn.className = "btn";
+    msgBtn.setAttribute("id", "end-btn");
+    msgBtn.textContent = "See Score";
+
+    newMsg.appendChild(msgBtn);
+    displayEl.appendChild(newMsg);
+    displayEl.addEventListener("click", function(event) {
+        if (event.target.matches("#end-btn")) {
+            removeCard();
+            displayScore();
+        }
+    });
+}
+
+var displayScore = function() {
+    window.alert(correctAnswers);
+}
 
 // Global event listeners
 displayEl.addEventListener("click", function(event) {
@@ -144,7 +167,6 @@ displayEl.addEventListener("click", function(event) {
 
 displayEl.addEventListener("click", function(event) {
     var target = event.target;
-
     if (target.matches(".answer-btn")) {
 
         var responseId = target.getAttribute("data-answer");
@@ -152,10 +174,11 @@ displayEl.addEventListener("click", function(event) {
         var responseText = target.textContent;
 
         if (responseId == 1) {
-            console.log("Correct answer: " + responseText);
+            console.log(responseText + " is correct!");
+            correctAnswers++;
         }
         else if (responseId == 0) {
-            console.log("Sorry, incorrect answer: " + responseText);
+            console.log("Sorry, " + responseText + " is incorrect.");
         }
 
         runQuizCard();
