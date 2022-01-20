@@ -1,11 +1,17 @@
 * {
     margin: 0;
+    line-height: 1.4;
 }
 
 /**** Header Section ****/
 /* main header */
+header {
+    background-color: green;
+    padding-bottom: 15px;
+}
+
 h1 {
-    color: green;
+    color: white;
     text-align: center;
     padding: 2%;
 }
@@ -39,19 +45,31 @@ main {
 }
 
 /* begin card */
-.msg-card {
+#begin-card {
     text-align: center;
     height: 150px;
     width: 350px;
     border: 1px solid black;
 }
 
+#begin-card h2 {
+    padding-top: 10px;
+}
+
+.btn {
+    margin: 20px 0;
+}
+
+#begin-btn {
+    margin: 30px 0;
+}
+
 /* quiz card */
-.quiz-card {
+.card {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     flex-wrap: nowrap;
     border: 1px solid black;
     width: 350px;
@@ -59,4 +77,12 @@ main {
 
 .quiz-answers li {
     list-style: none;
+}
+
+@media screen and (min-width: 575px) {
+    .msg-card {
+        height: 200px;
+        width: 500px;
+        padding-top: 40px;
+    }
 }

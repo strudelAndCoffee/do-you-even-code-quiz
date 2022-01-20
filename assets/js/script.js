@@ -8,52 +8,28 @@ var shuffleArray = function (array) {
     }
 };
 
-// GLOBAL VARIABLES AND OBJECTS
-// Element selectors for page sections
-var timerEl = document.querySelector("#timer");
-var currentTime = 60;
+// Global variables and objects
+// display elements
 var displayEl = document.querySelector(".display");
-var correctResponses = 0;
+var timerEl = document.querySelector("#timer");
 
-// Display message objects
-var startMsgObj = {
-    msg: "<p>Answer as many questions correctly as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Good Luck!",
-    btnId: "start",
-    btnMsg: "Got It",
-};
-var finishMsgObj = {
-    msg: "<p>You finished! <br />Let's see how you did...",
-    btnId: "end",
-    btnMsg: "Continue",
-};
-var timesUpMsgObj = {
-    msg: "<p>Oops! You ran out of time. <br />Try again?",
-    btnIdY: "restart",
-    btnIdN: "quit",
-    btnMsgY: "Try Again",
-    btnMsgN: "Quit",
-};
-// Quiz card message objects
+// quiz card message objects
 var card1 = {
-    id: 1,
     question: "What is 2 + 2?",
     wrongAnswers: ["5", "1", "3"],
     rightAnswer: "4",
 };
 var card2 = {
-    id: 2,
     question: "What is 2 - 2?",
     wrongAnswers: ["2", "1", "-2"],
     rightAnswer: "0",
 };
 var card3 = {
-    id: 3,
     question: "What is 2 * 2?",
     wrongAnswers: ["2", "8", "5"],
     rightAnswer: "4",
 };
 var card4 = {
-    id: 4,
     question: "What is 2 / 2 ",
     wrongAnswers: ["2", "-1", "0"],
     rightAnswer: "1",
@@ -61,89 +37,70 @@ var card4 = {
 var quizCardArray = [card1, card2, card3, card4];
 shuffleArray(quizCardArray);
 
-// GLOBAL FUNCTIONS
-// Generates messages to display before/after taking quiz
-var displayMessage = function(msgObj) {
+// Global functions
+// starting message and prompt
+var startMessage = function() {
+    var currentMsg = document.querySelector(".card");
+    currentMsg.remove();
 
-    if (msgObj !== timesUpMsgObj) {
-        var displayMsg = msgObj.msg;
-        var btnId = msgObj.btnId;
-        var btnMsg = msgObj.btnMsg;
+    var newMsg = document.createElement("article");
+    newMsg.className = "card";
+    newMsg.innerHTML = "<p>Answer as many questions correctly as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Good Luck!";
+    var msgBtn = document.createElement("button");
+    msgBtn.className = "btn";
+    msgBtn.setAttribute("id", "start-btn");
+    msgBtn.textContent = "Got It";
 
-        var currentCard = document.querySelector(".msg-card");
-        currentCard.remove();
-
-        var newCard = document.createElement("article");
-        newCard.className = "msg-card";
-        newCard.innerHTML = displayMsg;
-        var newBtn = document.createElement("button")
-        newBtn.setAttribute("id", btnId);
-        newBtn.textContent = btnMsg;
-
-        newCard.appendChild(newBtn);
-        displayEl.appendChild(newCard);
-    }
-    else if (msgObj === timesUpMsgObj) {
-        var displayMsg = msgObj.msg;
-        var btnIdYes = msgObj.btnIdY;
-        var btnIdNo = msgObj.btnIdN;
-        var btnYes = msgObj.btnMsgY;
-        var btnNo = msgObj.btnMsgN;
-
-        var currentCard = document.querySelector(".msg-card");
-        currentCard.remove();
-
-        var newCard = document.createElement("article");
-        newCard.className = "msg-card";
-        newCard.innerHTML = displayMsg;
-        var newBtnY = document.createElement("button")
-        newBtnY.setAttribute("id", btnIdYes);
-        newBtnY.textContent = btnYes;
-        var newBtnN = document.createElement("button")
-        newBtnN.setAttribute("id", btnIdNo);
-        newBtnN.textContent = btnNo;
-    }
+    newMsg.appendChild(msgBtn);
+    displayEl.appendChild(newMsg);
+    displayEl.addEventListener("click", function(event) {
+        if (event.target.matches("#start-btn")) {
+            runQuiz();
+        }
+    });
 };
 
-// Runs through quiz cards
+// displays quiz cards and cycles through after answering until time runs out
 var runQuiz = function() {
-    
+
+    startTimer();
+
     for (var i = 0; i < quizCardArray.length; i++) {
-        var currentCard = quizCardArray[i];
-        var wrongAnswers = currentCard.wrongAnswers;
-        var rightAnswer = currentCard.rightAnswer;
 
-        var newCardEl = document.createElement("article");
-        newCardEl.className = "quiz-card";
-        newCardEl.setAttribute("id", currentCard.id);
+        var currentCard = displayEl.querySelector(".card");
+        currentCard.remove();
 
+        var quizCardInfo = quizCardArray[i];
+        var wrongAns = quizCardInfo.wrongAnswers;
+        var rightAns = quizCardInfo.rightAnswer;
+
+        var newCard = document.createElement("article");
+        newCard.className = "card";
         var cardQuestion = document.createElement("h4");
-        cardQuestion.className = "quiz-question";
-        cardQuestion.textContent = currentCard.question;
-        newCardEl.appendChild(cardQuestion);
-
-        var cardAnswersEl = document.createElement("ul");
-        cardAnswersEl.className = "quiz-answers";
+        cardQuestion.textContent = quizCardInfo.question;
+        newCard.appendChild(cardQuestion);
+        var ansList = document.createElement("ul");
+        ansList.className = "quiz-answers";
         var allAnswers = [];
 
-        for (var i = 0; i < wrongAnswers.length; i++) {
+        for (var i = 0; i < wrongAns.length; i++) {
             var wrongAnswerEl = document.createElement("li");
             wrongAnswerEl.className = "list-answer";
             var wrongAnswerBtn = document.createElement("button");
             wrongAnswerBtn.setAttribute("data-answer", 0);
             wrongAnswerBtn.className = "answer-btn";
-            wrongAnswerBtn.textContent = wrongAnswers[i];
+            wrongAnswerBtn.textContent = wrongAns[i];
             wrongAnswerEl.appendChild(wrongAnswerBtn);
 
             allAnswers.push(wrongAnswerEl);
-        }
+        };
 
         var rightAnswerEl = document.createElement("li");
         rightAnswerEl.className = "list-answer";
         var rightAnswerBtn = document.createElement("button");
         rightAnswerBtn.setAttribute("data-answer", 1);
         rightAnswerBtn.className = "answer-btn";
-        rightAnswerBtn.textContent = rightAnswer;
+        rightAnswerBtn.textContent = rightAns;
         rightAnswerEl.appendChild(rightAnswerBtn);
 
         allAnswers.push(rightAnswerEl);
@@ -151,81 +108,39 @@ var runQuiz = function() {
 
         for (var i = 0; i < allAnswers.length; i++) {
             var answerEl = allAnswers[i];
-            cardAnswersEl.appendChild(answerEl);
-        }
+            ansList.appendChild(answerEl);
+        };
 
-        newCardEl.appendChild(cardAnswersEl);
-        displayEl.appendChild(newCardEl);
-        cardAnswersEl.addEventListener("click", response);
-    }
-};
+        newCard.appendChild(ansList);
+        displayEl.appendChild(newCard);
+        displayEl.addEventListener("click", function(event) {
+            var target = event.target;
 
-var response = function(event) {
-    var cardEl = document.querySelector(".quiz-card");
-    var selectedAnswer = event.target;
-    var answerBtnValue = selectedAnswer.getAttribute("data-answer");
-
-    if (answerBtnValue == 1) {
-        selectedAnswer.setAttribute("style", "background-color: green;");
-        var answerMsg = document.createElement("h4");
-        answerMsg.className = "answer-msg";
-        answerMsg.textContent = "Correct!";
-        cardEl.appendChild(answerMsg);
-        correctResponses++;
-    }
-    else if (answerBtnValue == 0) {
-        selectedAnswer.setAttribute("style", "background-color: orange;");
-        var answerMsg = document.createElement("h4");
-        answerMsg.className = "answer-msg";
-        answerMsg.textContent = "Incorrect.";
-        cardEl.appendChild(answerMsg);
-        currentTime -= 5;
-    }
-};
-
-
-var playAgain = function(event) {
-    var targetBtn = event.target;
-
-    if (targetBtn.matches("#restart")) {
-        console.log("restart quiz");
-    }
-    else if (targetBtn.matches("#quit")) {
-        console.log("quit quiz");
-    }
-}
-
-// Prompt to begin
-displayEl.addEventListener("click", function(event) {
-    targetBtn = event.target;
-
-    if (targetBtn.matches("#begin-btn")) {
-        displayMessage(startMsgObj);
-    }
-});
-
-// Starts countdown and quiz
-displayEl.addEventListener("click", function(event) {
-    var targetBtn = event.target;
-
-    if (targetBtn.matches("#start")) {
-        var currentCard = document.querySelector(".msg-card");
-        currentCard.remove();
-
-        runQuiz();
-
-        var timeInterval = setInterval(function () {
-            if (currentTime >= 1) {
-            timerEl.textContent = currentTime;
-            currentTime--;
-            } else {
-            timerEl.textContent = 0;
-            clearInterval(timeInterval);
-            runGameOver();
+            if (target.matches(".answer-btn")) {
+                var response = target.getAttribute("data-answer");
+                parseInt(response);
+                
+                if (response == 1) {
+                    console.log("Correct!");
+                    return;
+                }
+                else if (response == 0) {
+                    console.log("Sorry, incorrect");
+                    return;
+                };
             }
-        }, 1000);
+        });
+    };
+};
+
+var startTimer = function() {
+    console.log("timer has started");
+};
+
+// Global event listeners
+// displays starting message when "begin" button is clicked
+displayEl.addEventListener("click", function(event) {
+    if (event.target.matches("#begin-btn")) {
+        startMessage();
     }
 });
-
-// Restarts quiz
-displayEl.addEventListener("click", playAgain);
