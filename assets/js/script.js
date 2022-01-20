@@ -15,7 +15,11 @@ var displayStatus = displayEl.getAttribute("status");
 var timerEl = document.querySelector("#timer");
 var currentTime = {
     count: 30,
-    clear: false
+    clear: false,
+    reset: function() {
+        this.count = 30;
+        this.clear = false;
+    },
 };
 var correctAnswers = 0;
 var score = 0;
@@ -41,8 +45,7 @@ var card4 = {
     wrongAnswers: ["2", "-1", "0"],
     rightAnswer: "1",
 };
-var quizCardArray = [card1, card2, card3, card4];
-shuffleArray(quizCardArray);
+var quizCardArray = [];
 
 // Global functions
 var removeCard = function() {
@@ -51,8 +54,14 @@ var removeCard = function() {
 }
 
 var startMessage = function() {
-    
+
     removeCard();
+
+    currentTime.reset();
+    correctAnswers = 0;
+    quizCardArray = [];
+    quizCardArray.push(card1, card2, card3, card4);
+    shuffleArray(quizCardArray);
 
     var newMsg = document.createElement("article");
     newMsg.className = "card";
@@ -64,13 +73,6 @@ var startMessage = function() {
 
     newMsg.appendChild(msgBtn);
     displayEl.appendChild(newMsg);
-
-    displayEl.addEventListener("click", function(event) {
-        if (event.target.matches("#start-btn")) {
-            startTimer();
-            runQuizCard();
-        }
-    });
 };
 
 var startTimer = function() {
@@ -92,21 +94,18 @@ var startTimer = function() {
 };
 
 var runQuizCard = function() {
-
-    removeCard();
-
-    var currentCard = quizCardArray.shift();
-
-    if (!currentCard) {
+    if (quizCardArray.length == 0) {
         score = currentTime.count;
         endMessage();
     }
     else {
-        quizCardHandler(currentCard);
+        quizCardHandler(quizCardArray.shift());
     };
 };
 
 var quizCardHandler = function(card) {
+
+    removeCard();
 
     var wrongAns = card.wrongAnswers;
     var rightAns = card.rightAnswer;
@@ -156,6 +155,8 @@ var quizCardHandler = function(card) {
 };
 
 var endMessage = function() {
+
+    removeCard();
     currentTime.clear = true;
 
     var newMsg = document.createElement("article");
@@ -176,8 +177,24 @@ var endMessage = function() {
 };
 
 var runTimeOut = function() {
+
     removeCard();
-    window.alert("Opps, you ran out of time!");
+
+    var newMsg = document.createElement("article");
+    newMsg.className = "card";
+    newMsg.innerHTML = "<p>Oops, you ran out of time!</p>";
+    var msgBtn = document.createElement("button");
+    msgBtn.className = "btn";
+    msgBtn.setAttribute("id", "timeout-btn");
+    msgBtn.textContent = "Okay";
+
+    newMsg.appendChild(msgBtn);
+    displayEl.appendChild(newMsg);
+    displayEl.addEventListener("click", function(event) {
+        if (event.target.matches("#timeout-btn")) {
+            retryOrQuit();
+        }
+    });
 };
 
 var displayScore = function() {
@@ -187,22 +204,60 @@ var displayScore = function() {
     var newMsg = document.createElement("article");
     newMsg.className = "card";
     newMsg.innerHTML = "<p>Score: " + score + "<br /> Correct answers: " + correctAnswers + "</p>";
+    var scoreInput = document.createElement("input");
 
     displayEl.appendChild(newMsg);
+};
 
-    // var msgBtn = document.createElement("button");
-    // msgBtn.className = "btn";
-    // msgBtn.setAttribute("id", "end-btn");
-    // msgBtn.textContent = "See Score";
+var retryOrQuit = function() {
+
+    removeCard();
+
+    var newMsg = document.createElement("article");
+    newMsg.className = "card";
+    newMsg.innerHTML = "<p>Would you like to try again?</p>";
+    var msgBtnRst = document.createElement("button");
+    msgBtnRst.className = "btn";
+    msgBtnRst.setAttribute("id", "restart-btn");
+    msgBtnRst.textContent = "Restart Quiz";
+    var msgBtnQuit = document.createElement("button");
+    msgBtnQuit.className = "btn";
+    msgBtnQuit.setAttribute("id", "quit-btn");
+    msgBtnQuit.textContent = "Quit";
+
+    newMsg.appendChild(msgBtnRst);
+    newMsg.appendChild(msgBtnQuit);
+    displayEl.appendChild(newMsg);
+
+    displayEl.addEventListener("click", function(event) {
+        var target = event.target;
+
+        if (target.matches("#restart-btn")) {
+            startMessage();
+        }
+        else if (target.matches("#quit-btn")) {
+            removeCard();
+        }
+    });
 };
 
 // Global event listeners
+// initial message card with begin button
 displayEl.addEventListener("click", function(event) {
     if (event.target.matches("#begin-btn")) {
         startMessage();
     }
 });
 
+// first message card with "got it" button
+displayEl.addEventListener("click", function(event) {
+    if (event.target.matches("#start-btn")) {
+        startTimer();
+        runQuizCard();
+    }
+});
+
+// quiz card answer buttons
 displayEl.addEventListener("click", function(event) {
     var target = event.target;
     if (target.matches(".answer-btn")) {
@@ -219,7 +274,6 @@ displayEl.addEventListener("click", function(event) {
             console.log("Sorry, " + responseText + " is incorrect.");
             currentTime.count -= 5;
         }
-
         runQuizCard();
     }
 });
