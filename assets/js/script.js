@@ -11,10 +11,8 @@ var shuffleArray = function (array) {
 
 // display elements
 var highScoresSelect = document.querySelector("#high-scores-view");
-var highScoresDisplay = document.querySelector("#high-scores");
-var highScores = [];
+var currentHighScore = JSON.parse(localStorage.getItem("high-score"));
 var displayEl = document.querySelector(".display");
-var displayStatus = displayEl.getAttribute("status");
 var timerEl = document.querySelector("#timer");
 var currentTime = {
     count: 30,
@@ -174,7 +172,7 @@ var endMessage = function() {
     displayEl.appendChild(newMsg);
     displayEl.addEventListener("click", function(event) {
         if (event.target.matches("#end-btn")) {
-            displayScore();
+            showScore();
         }
     });
 };
@@ -200,56 +198,93 @@ var runTimeOut = function() {
     });
 };
 
-var displayScore = function() {
+var showScore = function() {
 
     removeCard();
 
     var formEl = document.createElement("article");
     formEl.className = "card";
 
-    var formMsg = document.createElement("p");
-    formMsg.textContent = "Enter your name to save your score!";
-    formEl.appendChild(formMsg);
+    if (!currentHighScore) {
+        formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
-    var scoreDisplay = document.createElement("p");
-    scoreDisplay.textContent = "Your Score: " + score;
-    formEl.appendChild(scoreDisplay);
+        var yourScore = document.createElement("h4");
+        yourScore.textContent = "Your Score: " + score;
+        formEl.appendChild(yourScore);
 
-    var nameInput = document.createElement("input");
-    nameInput.setAttribute("type", "text");
-    nameInput.setAttribute("placeholder", "Name");
-    nameInput.setAttribute("id", "name-input");
-    formEl.appendChild(nameInput);
+        var nameInput = document.createElement("input");
+        nameInput.setAttribute("type", "text");
+        nameInput.setAttribute("placeholder", "Name");
+        nameInput.setAttribute("id", "name-input");
+        formEl.appendChild(nameInput);
 
-    var nameSubmit = document.createElement("button");
-    nameSubmit.setAttribute("id", "name-submit");
-    nameSubmit.textContent = "Submit";
-    formEl.appendChild(nameSubmit);
+        var nameSubmit = document.createElement("button");
+        nameSubmit.setAttribute("id", "name-submit");
+        nameSubmit.textContent = "Submit";
+        formEl.appendChild(nameSubmit);
 
-    displayEl.appendChild(formEl);
-    formEl.addEventListener("click", setHighScore);
+        displayEl.appendChild(formEl);
+        formEl.addEventListener("click", setHighScore);
+    }
+    else {
+        var formMsg = document.createElement("p");
+        formMsg.textContent = "You did not break the current high score.";
+        formEl.appendChild(formMsg);
+
+        var highScore = document.createElement("h4");
+        highScore.textContent = currentHighScore.score;
+        formEl.appendChild(highScore);
+
+        var yourScore = document.createElement("h4");
+        yourScore.textContent = "Your Score: " + score;
+        formEl.appendChild(yourScore);
+
+        var prompt = document.createElement("p");
+        prompt.textContent = "Would you like to try again?";
+        formEl.appendChild(prompt);
+        var promptBtnRst = document.createElement("button");
+        promptBtnRst.className = "btn";
+        promptBtnRst.setAttribute("id", "restart-btn");
+        promptBtnRst.textContent = "Restart Quiz";
+        formEl.appendChild(promptBtnRst);
+        var promptBtnQuit = document.createElement("button");
+        promptBtnQuit.className = "btn";
+        promptBtnQuit.setAttribute("id", "quit-btn");
+        promptBtnQuit.textContent = "Quit";
+        formEl.appendChild(promptBtnQuit);
+
+        displayEl.appendChild(formEl);
+        formEl.addEventListener("click", function(event) {
+            var target = event.target;
+    
+            if (target.matches("#restart-btn")) {
+                startMessage();
+            }
+            else if (target.matches("#quit-btn")) {
+                removeCard();
+            }
+        });
+    }
 };
 
 var setHighScore = function(event) {
     
     var target = event.target;
-    var nameInput = document.querySelector("input[id='name-input']").value;
-    var highScoreObj = {
-        name: nameInput,
-        score: score,
-    }
-    highScores.push(highScoreObj);
-
+    
     if (target.matches("#name-submit")) {
-
+        var nameInput = document.querySelector("input[id='name-input']").value;
         if (!nameInput) {
             window.alert("Please enter your name to save your score.");
             return false;
         }
-
-        localStorage.setItem("", JSON.stringify(highScores));
-        console.log(highScoreObj);
-        retryOrQuit();
+        else {
+            var highScoreObj = {
+                name: nameInput,
+                score: score,
+            }
+            localStorage.setItem("high-score", JSON.stringify(highScoreObj));
+            retryOrQuit();
+        }
     }
 };
 
@@ -288,15 +323,32 @@ var retryOrQuit = function() {
 var displayHighScores = function(event) {
     target = event.target;
 
-    if (target.matches(".view-high-scores")) {
-        var names = localStorage.getItem("name");
-        var scores = localStorage.getItem("score");
+    if (target.matches("#high-scores-view")) {
+        var scores = localStorage.getItem("high-score");
+        var displayClear = document.querySelector(".display");
+
+        if (!scores) {
+            return false;
+        }
+
+        scores = JSON.parse(scores);
+
         var scoresList = document.createElement("ol");
         scoresList.setAttribute("class", "scores-list");
 
-        //var listEl = document.createElement("li");
-        //listEl.innerHTML = "<p>" + names
-        console.log(names + " " + scores);
+        for (var i = 0; i < highScore.length; i++) {
+            var scoreItem = document.createElement("li");
+            scoreItem.innerHTML = "<p>" + highScore[i].name + ": " + highScore[i].score + "</p>";
+            scoresList.appendChild(scoreItem);
+        }
+
+        if (displayClear) {
+            removeCard();
+            displayEl.appendChild(scoresList);
+        }
+        else {
+            displayEl.appendChild(scoresList);
+        }
     }
 };
 
