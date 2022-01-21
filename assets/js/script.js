@@ -59,7 +59,7 @@ var startMessage = function() {
     removeCard();
 
     currentTime.reset();
-    correctAnswers = 0;
+    score = 0;
     quizCardArray = [];
     quizCardArray.push(card1, card2, card3, card4);
     shuffleArray(quizCardArray);
@@ -205,7 +205,7 @@ var showScore = function() {
     var formEl = document.createElement("article");
     formEl.className = "card";
 
-    if (!currentHighScore) {
+    if (!currentHighScore || currentHighScore.score < score) {
         formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
         var yourScore = document.createElement("h4");
@@ -226,13 +226,13 @@ var showScore = function() {
         displayEl.appendChild(formEl);
         formEl.addEventListener("click", setHighScore);
     }
-    else {
+    else if (currentHighScore.score > score) {
         var formMsg = document.createElement("p");
         formMsg.textContent = "You did not break the current high score.";
         formEl.appendChild(formMsg);
 
-        var highScore = document.createElement("h4");
-        highScore.textContent = currentHighScore.score;
+        var highScore = document.createElement("p");
+        highScore.textContent = "Current high score: " + currentHighScore.score;
         formEl.appendChild(highScore);
 
         var yourScore = document.createElement("h4");
