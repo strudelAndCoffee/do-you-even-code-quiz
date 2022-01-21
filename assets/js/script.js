@@ -205,7 +205,7 @@ var showScore = function() {
     var formEl = document.createElement("article");
     formEl.className = "card";
 
-    if (!currentHighScore || currentHighScore.score < score) {
+    if (!currentHighScore || currentHighScore.score <= score) {
         formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
         var yourScore = document.createElement("h4");
