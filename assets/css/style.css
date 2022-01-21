@@ -31,6 +31,11 @@ h1 {
     margin: 0 5%;
 }
 
+#high-scores-view:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /*** Main Section ***/
 /* main display for quiz cards */
 main {

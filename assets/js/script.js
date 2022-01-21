@@ -1,3 +1,4 @@
+// Global variables and objects
 // code sourced from Laurens Holst and ashleedawg at stackoverflow.com: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 var shuffleArray = function (array) {
     for (var i = array.length - 1; i > 0; i--) {
@@ -8,8 +9,10 @@ var shuffleArray = function (array) {
     }
 };
 
-// Global variables and objects
 // display elements
+var highScoresSelect = document.querySelector("#high-scores-view");
+var highScoresDisplay = document.querySelector("#high-scores");
+var highScores = [];
 var displayEl = document.querySelector(".display");
 var displayStatus = displayEl.getAttribute("status");
 var timerEl = document.querySelector("#timer");
@@ -201,12 +204,53 @@ var displayScore = function() {
 
     removeCard();
 
-    var newMsg = document.createElement("article");
-    newMsg.className = "card";
-    newMsg.innerHTML = "<p>Score: " + score + "<br /> Correct answers: " + correctAnswers + "</p>";
-    var scoreInput = document.createElement("input");
+    var formEl = document.createElement("article");
+    formEl.className = "card";
 
-    displayEl.appendChild(newMsg);
+    var formMsg = document.createElement("p");
+    formMsg.textContent = "Enter your name to save your score!";
+    formEl.appendChild(formMsg);
+
+    var scoreDisplay = document.createElement("p");
+    scoreDisplay.textContent = "Your Score: " + score;
+    formEl.appendChild(scoreDisplay);
+
+    var nameInput = document.createElement("input");
+    nameInput.setAttribute("type", "text");
+    nameInput.setAttribute("placeholder", "Name");
+    nameInput.setAttribute("id", "name-input");
+    formEl.appendChild(nameInput);
+
+    var nameSubmit = document.createElement("button");
+    nameSubmit.setAttribute("id", "name-submit");
+    nameSubmit.textContent = "Submit";
+    formEl.appendChild(nameSubmit);
+
+    displayEl.appendChild(formEl);
+    formEl.addEventListener("click", setHighScore);
+};
+
+var setHighScore = function(event) {
+    
+    var target = event.target;
+    var nameInput = document.querySelector("input[id='name-input']").value;
+    var highScoreObj = {
+        name: nameInput,
+        score: score,
+    }
+    highScores.push(highScoreObj);
+
+    if (target.matches("#name-submit")) {
+
+        if (!nameInput) {
+            window.alert("Please enter your name to save your score.");
+            return false;
+        }
+
+        localStorage.setItem("", JSON.stringify(highScores));
+        console.log(highScoreObj);
+        retryOrQuit();
+    }
 };
 
 var retryOrQuit = function() {
@@ -239,6 +283,21 @@ var retryOrQuit = function() {
             removeCard();
         }
     });
+};
+
+var displayHighScores = function(event) {
+    target = event.target;
+
+    if (target.matches(".view-high-scores")) {
+        var names = localStorage.getItem("name");
+        var scores = localStorage.getItem("score");
+        var scoresList = document.createElement("ol");
+        scoresList.setAttribute("class", "scores-list");
+
+        //var listEl = document.createElement("li");
+        //listEl.innerHTML = "<p>" + names
+        console.log(names + " " + scores);
+    }
 };
 
 // Global event listeners
@@ -277,3 +336,6 @@ displayEl.addEventListener("click", function(event) {
         runQuizCard();
     }
 });
+
+// view high scores select
+highScoresSelect.addEventListener("click", displayHighScores);
