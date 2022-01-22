@@ -388,7 +388,7 @@ cardDisplayEl.addEventListener("click", function(event) {
         else if (responseId == 0) {
             console.log("Sorry, " + responseText + " is incorrect.");
             target.setAttribute("style", "background-color:orange;");
-            currentTime.count -= 5;
+            currentTime.count -= 7;
         }
         setTimeout(runQuizCard, 800);
     }
