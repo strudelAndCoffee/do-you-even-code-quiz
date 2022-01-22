@@ -30,6 +30,11 @@ var card1 = {
     wrongAnswers: ["strings", "booleans", "numbers"],
     rightAnswer: "alerts",
 };
+var card1 = {
+    question: "A ____ is used when selecting an 'id' in a CSS style sheet",
+    wrongAnswers: ["$", ".", "@"],
+    rightAnswer: "#",
+};
 var card2 = {
     question: "The condition in an if / else statement is enclosed within ____.",
     wrongAnswers: ["quotes ''", "curly brackets {}", "square brackets []"],
@@ -41,15 +46,15 @@ var card3 = {
     rightAnswer: "all of the above",
 };
 var card4 = {
-    question: "String values must be enclosed within ____ when being assigned to variables.",
-    wrongAnswers: ["commas ,,", "curly brackets {}", "parantheses ()"],
-    rightAnswer: "quotes ''",
+    question: "The two attributes that every <img> tag should have are:",
+    wrongAnswers: ["rel, href", "type, href", "name, placeholder"],
+    rightAnswer: "src, alt",
 };
 var card5 = {
-    question: "A very useful tool used during development and debugging for printing content to the debugger is:",
-    wrongAnswers: ["javascript", "terminal / bash", "for loops"],
-    rightAnswer: "console.log",
-}
+    question: "localStorage and sessionStorage store data as:",
+    wrongAnswers: ["objects", "arrays", "variables"],
+    rightAnswer: "key / value pairs",
+};
 var quizCardArray = [];
 
 // Global functions
@@ -71,7 +76,7 @@ var startMessage = function() {
 
     var newMsg = document.createElement("article");
     newMsg.className = "card";
-    newMsg.innerHTML = "<p>Answer as many questions as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Your score will equal the time life once the quiz is complete. Good Luck!</p>";
+    newMsg.innerHTML = "<p>Answer as many questions as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. Good Luck!</p>";
     var msgBtn = document.createElement("button");
     msgBtn.className = "btn";
     msgBtn.setAttribute("id", "start-btn");
@@ -198,7 +203,7 @@ var runTimeOut = function() {
     cardDisplayEl.appendChild(newMsg);
     cardDisplayEl.addEventListener("click", function(event) {
         if (event.target.matches("#timeout-btn")) {
-            retryOrQuit();
+            showScore();
         }
     });
 };
@@ -216,13 +221,13 @@ var showScore = function() {
         formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
         var yourScore = document.createElement("p");
-        yourScore.className = "bg-dark";
+        yourScore.className = "border";
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
         var yourAnswers = document.createElement("p");
         yourAnswers.textContent = "Correct answers: " + correctAnswers;
-        yourAnswers.className = "bg-dark";
+        yourAnswers.className = "border";
         formEl.appendChild(yourAnswers);
 
         var nameInput = document.createElement("input");
@@ -246,17 +251,17 @@ var showScore = function() {
 
         var highScoreToBeat = document.createElement("p");
         var value = highScore[1].toString();
-        highScoreToBeat.className = "bg-dark";
+        highScoreToBeat.className = "border";
         highScoreToBeat.textContent = "Current high score: " + value;
         formEl.appendChild(highScoreToBeat);
 
         var yourScore = document.createElement("p");
-        yourScore.className = "bg-dark";
+        yourScore.className = "border";
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
         var yourAnswers = document.createElement("p");
-        yourAnswers.className = "bg-dark";
+        yourAnswers.className = "border";
         yourAnswers.textContent = "Correct answers: " + correctAnswers;
         formEl.appendChild(yourAnswers);
 
@@ -343,19 +348,19 @@ var retryOrQuit = function() {
 var displayHighScore = function(event) {
     target = event.target;
     var currentHighScore = localStorage.getItem("high-score");
-
+    var scoreDisplayEl = document.querySelector("#high-score-display");
+    
     if (target.matches("#high-scores-view")) {
 
         if (!currentHighScore) {
-            window.alert("No current high score set. Try refreshing page, or complete quiz to set high score.");
+            scoreDisplayEl.innerHTML = "<em>No high score yet...</em>";
             return false;
         }
         else {
             var hsArray = JSON.parse(currentHighScore);
             var name = hsArray[0];
             var score = hsArray[1];
-            var hsEl = score + " (set by " + name + ")";
-            window.confirm(hsEl);
+            scoreDisplayEl.textContent = "[ " + name + ": " + score + " ]";
         }
     }
 };
