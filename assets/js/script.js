@@ -352,15 +352,22 @@ var displayHighScore = function(event) {
     
     if (target.matches("#high-scores-view")) {
 
-        if (!currentHighScore) {
-            scoreDisplayEl.innerHTML = "<em>No high score yet...</em>";
-            return false;
+        var displayStatus = scoreDisplayEl.textContent;
+
+        if (!displayStatus) {
+            if (!currentHighScore) {
+                scoreDisplayEl.textContent = "No high score yet...";
+                return false;
+            }
+            else {
+                var hsArray = JSON.parse(currentHighScore);
+                var name = hsArray[0];
+                var score = hsArray[1];
+                scoreDisplayEl.textContent = "[ " + name + ": " + score + " ]";
+            }
         }
         else {
-            var hsArray = JSON.parse(currentHighScore);
-            var name = hsArray[0];
-            var score = hsArray[1];
-            scoreDisplayEl.textContent = "[ " + name + ": " + score + " ]";
+            scoreDisplayEl.textContent = "";
         }
     }
 };
