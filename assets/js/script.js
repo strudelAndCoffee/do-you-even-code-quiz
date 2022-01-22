@@ -26,25 +26,30 @@ var score = 0;
 
 // quiz card message objects
 var card1 = {
-    question: "What is 2 + 2?",
-    wrongAnswers: ["5", "1", "3"],
-    rightAnswer: "4",
+    question: "Commonly used data types DO NOT include:",
+    wrongAnswers: ["strings", "booleans", "numbers"],
+    rightAnswer: "alerts",
 };
 var card2 = {
-    question: "What is 2 - 2?",
-    wrongAnswers: ["2", "1", "-2"],
-    rightAnswer: "0",
+    question: "The condition in an if / else statement is enclosed within ____.",
+    wrongAnswers: ["quotes ''", "curly brackets {}", "square brackets []"],
+    rightAnswer: "parantheses ()",
 };
 var card3 = {
-    question: "What is 2 * 2?",
-    wrongAnswers: ["2", "8", "5"],
-    rightAnswer: "4",
+    question: "Arrays in JavaScript can be used to store ____.",
+    wrongAnswers: ["numbers and strings", "other arrays", "booleans"],
+    rightAnswer: "all of the above",
 };
 var card4 = {
-    question: "What is 2 / 2 ",
-    wrongAnswers: ["2", "-1", "0"],
-    rightAnswer: "1",
+    question: "String values must be enclosed within ____ when being assigned to variables.",
+    wrongAnswers: ["commas ,,", "curly brackets {}", "parantheses ()"],
+    rightAnswer: "quotes ''",
 };
+var card5 = {
+    question: "A very useful tool used during development and debugging for printing content to the debugger is:",
+    wrongAnswers: ["javascript", "terminal / bash", "for loops"],
+    rightAnswer: "console.log",
+}
 var quizCardArray = [];
 
 // Global functions
@@ -61,12 +66,12 @@ var startMessage = function() {
     score = 0;
     correctAnswers = 0;
     quizCardArray = [];
-    quizCardArray.push(card1, card2, card3, card4);
+    quizCardArray.push(card1, card2, card3, card4, card5);
     shuffleArray(quizCardArray);
 
     var newMsg = document.createElement("article");
     newMsg.className = "card";
-    newMsg.innerHTML = "<p>Answer as many questions correctly as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Good Luck!</p>";
+    newMsg.innerHTML = "<p>Answer as many questions correctly as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Your score will equal the time life once the quiz is complete. <br />Good Luck!</p>";
     var msgBtn = document.createElement("button");
     msgBtn.className = "btn";
     msgBtn.setAttribute("id", "start-btn");
@@ -377,13 +382,15 @@ cardDisplayEl.addEventListener("click", function(event) {
 
         if (responseId == 1) {
             console.log(responseText + " is correct!");
+            target.setAttribute("style", "background-color:green;");
             correctAnswers++;
         }
         else if (responseId == 0) {
             console.log("Sorry, " + responseText + " is incorrect.");
+            target.setAttribute("style", "background-color:orange;");
             currentTime.count -= 5;
         }
-        runQuizCard();
+        setTimeout(runQuizCard, 1000);
     }
 });
 
