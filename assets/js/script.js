@@ -13,6 +13,8 @@ var shuffleArray = function (array) {
 var highScoreSelect = document.querySelector("#high-scores-view");
 var cardDisplayEl = document.querySelector(".display");
 var timerEl = document.querySelector("#timer");
+
+// data trackers
 var currentTime = {
     count: 60,
     clear: false,
@@ -58,11 +60,13 @@ var card5 = {
 var quizCardArray = [];
 
 // Global functions
+// removes the current card on display
 var removeCard = function() {
     var currentCard = document.querySelector(".card");
     currentCard.remove();
 }
 
+// loads the starting message before timer starts
 var startMessage = function() {
 
     removeCard();
@@ -86,6 +90,7 @@ var startMessage = function() {
     cardDisplayEl.appendChild(newMsg);
 };
 
+// starts the countdown timer
 var startTimer = function() {
     var timeInterval = setInterval(function () {
         if (currentTime.clear == true) {
@@ -104,6 +109,7 @@ var startTimer = function() {
     }, 1000);
 };
 
+// loads each quiz card
 var runQuizCard = function() {
     if (quizCardArray.length == 0) {
         score = currentTime.count;
@@ -114,6 +120,7 @@ var runQuizCard = function() {
     };
 };
 
+// generates the current quiz card
 var quizCardHandler = function(card) {
 
     removeCard();
@@ -165,6 +172,7 @@ var quizCardHandler = function(card) {
     cardDisplayEl.appendChild(newCard);
 };
 
+// loads card displaying message after you finish answering all of the quiz cards
 var endMessage = function() {
 
     removeCard();
@@ -187,6 +195,7 @@ var endMessage = function() {
     });
 };
 
+// loads card halting quiz if time runs out
 var runTimeOut = function() {
 
     removeCard();
@@ -208,6 +217,7 @@ var runTimeOut = function() {
     });
 };
 
+// loads card displaying score and correct answers, if setting new high score, provides input field for name
 var showScore = function() {
 
     removeCard();
@@ -293,6 +303,7 @@ var showScore = function() {
     }
 };
 
+// saves high score data to local storage
 var setHighScore = function(event) {
     
     var target = event.target;
@@ -313,6 +324,7 @@ var setHighScore = function(event) {
     }
 };
 
+// loads prompt for restart or quit
 var retryOrQuit = function() {
 
     removeCard();
@@ -345,6 +357,7 @@ var retryOrQuit = function() {
     });
 };
 
+// handles when view high score button is pressed
 var displayHighScore = function(event) {
     target = event.target;
     var currentHighScore = localStorage.getItem("high-score");
