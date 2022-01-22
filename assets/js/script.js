@@ -14,10 +14,10 @@ var highScoreSelect = document.querySelector("#high-scores-view");
 var cardDisplayEl = document.querySelector(".display");
 var timerEl = document.querySelector("#timer");
 var currentTime = {
-    count: 30,
+    count: 60,
     clear: false,
     reset: function() {
-        this.count = 30;
+        this.count = 60;
         this.clear = false;
     },
 };
@@ -59,6 +59,7 @@ var startMessage = function() {
 
     currentTime.reset();
     score = 0;
+    correctAnswers = 0;
     quizCardArray = [];
     quizCardArray.push(card1, card2, card3, card4);
     shuffleArray(quizCardArray);
@@ -213,6 +214,10 @@ var showScore = function() {
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
+        var yourAnswers = document.createElement("h4");
+        yourAnswers.textContent = "Correct answers: " + correctAnswers;
+        formEl.appendChild(yourAnswers);
+
         var nameInput = document.createElement("input");
         nameInput.setAttribute("type", "text");
         nameInput.setAttribute("placeholder", "Name");
@@ -240,6 +245,10 @@ var showScore = function() {
         var yourScore = document.createElement("h4");
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
+
+        var yourAnswers = document.createElement("h4");
+        yourAnswers.textContent = "Correct answers: " + correctAnswers;
+        formEl.appendChild(yourAnswers);
 
         var prompt = document.createElement("p");
         prompt.textContent = "Would you like to try again?";
