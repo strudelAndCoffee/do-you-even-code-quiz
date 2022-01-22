@@ -10,9 +10,8 @@ var shuffleArray = function (array) {
 };
 
 // display elements
-var highScoresSelect = document.querySelector("#high-scores-view");
-var currentHighScore = JSON.parse(localStorage.getItem("high-score"));
-var displayEl = document.querySelector(".display");
+var highScoreSelect = document.querySelector("#high-scores-view");
+var cardDisplayEl = document.querySelector(".display");
 var timerEl = document.querySelector("#timer");
 var currentTime = {
     count: 30,
@@ -73,7 +72,7 @@ var startMessage = function() {
     msgBtn.textContent = "Got It";
 
     newMsg.appendChild(msgBtn);
-    displayEl.appendChild(newMsg);
+    cardDisplayEl.appendChild(newMsg);
 };
 
 var startTimer = function() {
@@ -152,7 +151,7 @@ var quizCardHandler = function(card) {
     };
 
     newCard.appendChild(ansList);
-    displayEl.appendChild(newCard);
+    cardDisplayEl.appendChild(newCard);
 };
 
 var endMessage = function() {
@@ -169,8 +168,8 @@ var endMessage = function() {
     msgBtn.textContent = "See Score";
 
     newMsg.appendChild(msgBtn);
-    displayEl.appendChild(newMsg);
-    displayEl.addEventListener("click", function(event) {
+    cardDisplayEl.appendChild(newMsg);
+    cardDisplayEl.addEventListener("click", function(event) {
         if (event.target.matches("#end-btn")) {
             showScore();
         }
@@ -190,8 +189,8 @@ var runTimeOut = function() {
     msgBtn.textContent = "Okay";
 
     newMsg.appendChild(msgBtn);
-    displayEl.appendChild(newMsg);
-    displayEl.addEventListener("click", function(event) {
+    cardDisplayEl.appendChild(newMsg);
+    cardDisplayEl.addEventListener("click", function(event) {
         if (event.target.matches("#timeout-btn")) {
             retryOrQuit();
         }
@@ -204,8 +203,10 @@ var showScore = function() {
 
     var formEl = document.createElement("article");
     formEl.className = "card";
+    var highScore = localStorage.getItem("high-score");
+    highScore = JSON.parse(highScore);
 
-    if (!currentHighScore || currentHighScore.score <= score) {
+    if (!highScore || highScore[1] <= score) {
         formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
         var yourScore = document.createElement("h4");
@@ -223,17 +224,18 @@ var showScore = function() {
         nameSubmit.textContent = "Submit";
         formEl.appendChild(nameSubmit);
 
-        displayEl.appendChild(formEl);
+        cardDisplayEl.appendChild(formEl);
         formEl.addEventListener("click", setHighScore);
     }
-    else if (currentHighScore.score > score) {
+    else if (highScore[1] > score) {
         var formMsg = document.createElement("p");
         formMsg.textContent = "You did not break the current high score.";
         formEl.appendChild(formMsg);
 
-        var highScore = document.createElement("p");
-        highScore.textContent = "Current high score: " + currentHighScore.score;
-        formEl.appendChild(highScore);
+        var highScoreToBeat = document.createElement("h4");
+        var value = highScore[1].toString();
+        highScoreToBeat.textContent = "Current high score: " + value;
+        formEl.appendChild(highScoreToBeat);
 
         var yourScore = document.createElement("h4");
         yourScore.textContent = "Your Score: " + score;
@@ -253,7 +255,7 @@ var showScore = function() {
         promptBtnQuit.textContent = "Quit";
         formEl.appendChild(promptBtnQuit);
 
-        displayEl.appendChild(formEl);
+        cardDisplayEl.appendChild(formEl);
         formEl.addEventListener("click", function(event) {
             var target = event.target;
     
@@ -278,11 +280,10 @@ var setHighScore = function(event) {
             return false;
         }
         else {
-            var highScoreObj = {
-                name: nameInput,
-                score: score,
-            }
-            localStorage.setItem("high-score", JSON.stringify(highScoreObj));
+            nameInput.toString();
+            score.toString();
+            var highScoreArray = [nameInput, score];
+            localStorage.setItem("high-score", JSON.stringify(highScoreArray));
             retryOrQuit();
         }
     }
@@ -306,9 +307,9 @@ var retryOrQuit = function() {
 
     newMsg.appendChild(msgBtnRst);
     newMsg.appendChild(msgBtnQuit);
-    displayEl.appendChild(newMsg);
+    cardDisplayEl.appendChild(newMsg);
 
-    displayEl.addEventListener("click", function(event) {
+    cardDisplayEl.addEventListener("click", function(event) {
         var target = event.target;
 
         if (target.matches("#restart-btn")) {
@@ -320,48 +321,36 @@ var retryOrQuit = function() {
     });
 };
 
-var displayHighScores = function(event) {
+var displayHighScore = function(event) {
     target = event.target;
+    var currentHighScore = localStorage.getItem("high-score");
 
     if (target.matches("#high-scores-view")) {
-        var scores = localStorage.getItem("high-score");
-        var displayClear = document.querySelector(".display");
 
-        if (!scores) {
+        if (!currentHighScore) {
+            window.alert("No current high score set. Try refreshing page, or complete quiz to set high score.");
             return false;
         }
-
-        scores = JSON.parse(scores);
-
-        var scoresList = document.createElement("ol");
-        scoresList.setAttribute("class", "scores-list");
-
-        for (var i = 0; i < highScore.length; i++) {
-            var scoreItem = document.createElement("li");
-            scoreItem.innerHTML = "<p>" + highScore[i].name + ": " + highScore[i].score + "</p>";
-            scoresList.appendChild(scoreItem);
-        }
-
-        if (displayClear) {
-            removeCard();
-            displayEl.appendChild(scoresList);
-        }
         else {
-            displayEl.appendChild(scoresList);
+            var hsArray = JSON.parse(currentHighScore);
+            var name = hsArray[0];
+            var score = hsArray[1];
+            var hsEl = score + " (set by " + name + ")";
+            window.confirm(hsEl);
         }
     }
 };
 
 // Global event listeners
 // initial message card with begin button
-displayEl.addEventListener("click", function(event) {
+cardDisplayEl.addEventListener("click", function(event) {
     if (event.target.matches("#begin-btn")) {
         startMessage();
     }
 });
 
 // first message card with "got it" button
-displayEl.addEventListener("click", function(event) {
+cardDisplayEl.addEventListener("click", function(event) {
     if (event.target.matches("#start-btn")) {
         startTimer();
         runQuizCard();
@@ -369,7 +358,7 @@ displayEl.addEventListener("click", function(event) {
 });
 
 // quiz card answer buttons
-displayEl.addEventListener("click", function(event) {
+cardDisplayEl.addEventListener("click", function(event) {
     var target = event.target;
     if (target.matches(".answer-btn")) {
 
@@ -390,4 +379,4 @@ displayEl.addEventListener("click", function(event) {
 });
 
 // view high scores select
-highScoresSelect.addEventListener("click", displayHighScores);
+highScoreSelect.addEventListener("click", displayHighScore);
