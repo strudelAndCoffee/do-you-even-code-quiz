@@ -56,7 +56,7 @@ h1 {
 /*** Main Section ***/
 /* main display for quiz cards */
 main {
-    padding-top: 10%;
+    padding-top: 3%;
 }
 
 .display {
@@ -142,13 +142,13 @@ main {
     padding: 0 3px;
 }
 
-@media screen and (min-width: 575px) {
+@media screen and (min-width: 768px) {
     h1 {
         padding: 1% 0;
     }
 
     main {
-        padding-top: 6%;
+        padding-top: 5%;
     }
 
     .card {
