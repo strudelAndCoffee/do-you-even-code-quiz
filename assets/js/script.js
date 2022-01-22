@@ -215,12 +215,14 @@ var showScore = function() {
     if (!highScore || highScore[1] <= score) {
         formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
-        var yourScore = document.createElement("h5");
+        var yourScore = document.createElement("p");
+        yourScore.className = "bg-dark";
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
-        var yourAnswers = document.createElement("h5");
+        var yourAnswers = document.createElement("p");
         yourAnswers.textContent = "Correct answers: " + correctAnswers;
+        yourAnswers.className = "bg-dark";
         formEl.appendChild(yourAnswers);
 
         var nameInput = document.createElement("input");
@@ -242,16 +244,19 @@ var showScore = function() {
         formMsg.textContent = "You did not break the current high score.";
         formEl.appendChild(formMsg);
 
-        var highScoreToBeat = document.createElement("h5");
+        var highScoreToBeat = document.createElement("p");
         var value = highScore[1].toString();
+        highScoreToBeat.className = "bg-dark";
         highScoreToBeat.textContent = "Current high score: " + value;
         formEl.appendChild(highScoreToBeat);
 
-        var yourScore = document.createElement("h5");
+        var yourScore = document.createElement("p");
+        yourScore.className = "bg-dark";
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
-        var yourAnswers = document.createElement("h5");
+        var yourAnswers = document.createElement("p");
+        yourAnswers.className = "bg-dark";
         yourAnswers.textContent = "Correct answers: " + correctAnswers;
         formEl.appendChild(yourAnswers);
 

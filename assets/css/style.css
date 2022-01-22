@@ -2,6 +2,7 @@
     margin: 0;
     line-height: 1.5;
     font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
 }
 
 /**** Header Section ****/
@@ -114,6 +115,12 @@ main {
 
 #quit-btn {
     margin: 0 0 15px 0;
+}
+
+/* score card */
+.bg-dark {
+    background-color: rgb(145, 255, 238);
+    padding: 0 3px;
 }
 
 @media screen and (min-width: 575px) {
