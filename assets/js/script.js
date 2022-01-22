@@ -123,13 +123,13 @@ var quizCardHandler = function(card) {
     cardQuestion.textContent = card.question;
     newCard.appendChild(cardQuestion);
 
-    var ansList = document.createElement("ul");
+    var ansList = document.createElement("div");
     ansList.className = "quiz-answers";
     var allAnswers = [];
 
     for (var i = 0; i < wrongAns.length; i++) {
 
-        var wrongAnswerEl = document.createElement("li");
+        var wrongAnswerEl = document.createElement("p");
         wrongAnswerEl.className = "list-answer";
         var wrongAnswerBtn = document.createElement("button");
         wrongAnswerBtn.setAttribute("data-answer", 0);
@@ -140,7 +140,7 @@ var quizCardHandler = function(card) {
         allAnswers.push(wrongAnswerEl);
     };
 
-    var rightAnswerEl = document.createElement("li");
+    var rightAnswerEl = document.createElement("p");
     rightAnswerEl.className = "list-answer";
     var rightAnswerBtn = document.createElement("button");
     rightAnswerBtn.setAttribute("data-answer", 1);
@@ -215,11 +215,11 @@ var showScore = function() {
     if (!highScore || highScore[1] <= score) {
         formEl.innerHTML = "<p>You set a new high score! <br />Enter your name to save your score.</p>";
 
-        var yourScore = document.createElement("h4");
+        var yourScore = document.createElement("h5");
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
-        var yourAnswers = document.createElement("h4");
+        var yourAnswers = document.createElement("h5");
         yourAnswers.textContent = "Correct answers: " + correctAnswers;
         formEl.appendChild(yourAnswers);
 
@@ -242,16 +242,16 @@ var showScore = function() {
         formMsg.textContent = "You did not break the current high score.";
         formEl.appendChild(formMsg);
 
-        var highScoreToBeat = document.createElement("h4");
+        var highScoreToBeat = document.createElement("h5");
         var value = highScore[1].toString();
         highScoreToBeat.textContent = "Current high score: " + value;
         formEl.appendChild(highScoreToBeat);
 
-        var yourScore = document.createElement("h4");
+        var yourScore = document.createElement("h5");
         yourScore.textContent = "Your Score: " + score;
         formEl.appendChild(yourScore);
 
-        var yourAnswers = document.createElement("h4");
+        var yourAnswers = document.createElement("h5");
         yourAnswers.textContent = "Correct answers: " + correctAnswers;
         formEl.appendChild(yourAnswers);
 
@@ -382,7 +382,7 @@ cardDisplayEl.addEventListener("click", function(event) {
 
         if (responseId == 1) {
             console.log(responseText + " is correct!");
-            target.setAttribute("style", "background-color:green;");
+            target.setAttribute("style", "background-color:green; color:white;");
             correctAnswers++;
         }
         else if (responseId == 0) {
@@ -390,7 +390,7 @@ cardDisplayEl.addEventListener("click", function(event) {
             target.setAttribute("style", "background-color:orange;");
             currentTime.count -= 5;
         }
-        setTimeout(runQuizCard, 1000);
+        setTimeout(runQuizCard, 800);
     }
 });
 
