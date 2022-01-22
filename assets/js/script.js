@@ -31,9 +31,9 @@ var card1 = {
     rightAnswer: "alerts",
 };
 var card1 = {
-    question: "A ____ is used when selecting an 'id' in a CSS style sheet",
-    wrongAnswers: ["$", ".", "@"],
-    rightAnswer: "#",
+    question: "Which function sets a delay in milliseconds before calling another function:",
+    wrongAnswers: ["setInterval()", "delayTime()", "clearInterval()"],
+    rightAnswer: "setTimeout()",
 };
 var card2 = {
     question: "The condition in an if / else statement is enclosed within ____.",
@@ -46,9 +46,9 @@ var card3 = {
     rightAnswer: "all of the above",
 };
 var card4 = {
-    question: "The two attributes that every <img> tag should have are:",
-    wrongAnswers: ["rel, href", "type, href", "name, placeholder"],
-    rightAnswer: "src, alt",
+    question: "Strings must be wrapped in ____ when defining a variable.",
+    wrongAnswers: ["commas ,,", "square brackets []", "angle brackets <>"],
+    rightAnswer: "quotes ''",
 };
 var card5 = {
     question: "localStorage and sessionStorage store data as:",
