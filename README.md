@@ -28,6 +28,5 @@ WHEN the game is over
 
 The following animation demonstrates the application functionality:
 
-![alt text](https://github.com/strudelAndCoffee/do-you-even-code-quiz/blob/main/assets/images/demo-screencap-1.png)
 ![alt text](https://github.com/strudelAndCoffee/do-you-even-code-quiz/blob/main/assets/images/demo-screencap-2.png)
 ![alt text](https://github.com/strudelAndCoffee/do-you-even-code-quiz/blob/main/assets/images/demo-screencap-3.png)
