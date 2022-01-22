@@ -33,7 +33,7 @@ var card1 = {
     rightAnswer: "alerts",
 };
 var card1 = {
-    question: "Which function sets a delay in milliseconds before calling another function:",
+    question: "Which function sets a one-time delay in milliseconds before calling another function:",
     wrongAnswers: ["setInterval()", "delayTime()", "clearInterval()"],
     rightAnswer: "setTimeout()",
 };
@@ -53,7 +53,7 @@ var card4 = {
     rightAnswer: "quotes ''",
 };
 var card5 = {
-    question: "localStorage and sessionStorage store data as:",
+    question: "localStorage and sessionStorage save data as:",
     wrongAnswers: ["objects", "arrays", "variables"],
     rightAnswer: "key / value pairs",
 };
