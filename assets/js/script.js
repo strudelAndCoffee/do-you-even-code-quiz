@@ -71,7 +71,7 @@ var startMessage = function() {
 
     var newMsg = document.createElement("article");
     newMsg.className = "card";
-    newMsg.innerHTML = "<p>Answer as many questions correctly as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Your score will equal the time life once the quiz is complete. <br />Good Luck!</p>";
+    newMsg.innerHTML = "<p>Answer as many questions as you can in 60 seconds. <br />Answering incorrectly will subtract time from the counter. <br />Your score will equal the time life once the quiz is complete. Good Luck!</p>";
     var msgBtn = document.createElement("button");
     msgBtn.className = "btn";
     msgBtn.setAttribute("id", "start-btn");
@@ -177,7 +177,7 @@ var endMessage = function() {
     cardDisplayEl.appendChild(newMsg);
     cardDisplayEl.addEventListener("click", function(event) {
         if (event.target.matches("#end-btn")) {
-            showScore();
+            setTimeout(showScore, 100);
         }
     });
 };
@@ -395,7 +395,7 @@ cardDisplayEl.addEventListener("click", function(event) {
             target.setAttribute("style", "background-color:orange;");
             currentTime.count -= 7;
         }
-        setTimeout(runQuizCard, 800);
+        setTimeout(runQuizCard, 600);
     }
 });
 

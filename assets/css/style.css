@@ -1,6 +1,6 @@
 * {
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.4;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
 }
@@ -97,7 +97,7 @@ main {
 }
 
 .card p {
-    margin: 5px 0;
+    margin: 7px 0;
     text-align: center;
 }
 
