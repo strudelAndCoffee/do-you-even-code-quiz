@@ -47,7 +47,7 @@ var card3 = {
 };
 var card4 = {
     question: "Strings must be wrapped in ____ when defining a variable.",
-    wrongAnswers: ["commas ,,", "square brackets []", "angle brackets <>"],
+    wrongAnswers: ["asterisks **", "square brackets []", "angle brackets <>"],
     rightAnswer: "quotes ''",
 };
 var card5 = {
